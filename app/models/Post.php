@@ -7,7 +7,11 @@
     }
 
     public function getPosts($limit, $offset){
-      $this->db->query('SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit OFFSET :offset');
+      $this->db->query('SELECT posts.*, users.name as author_name
+                        FROM posts
+                        INNER JOIN users ON posts.user_id = users.id
+                        ORDER BY posts.created_at DESC
+                        LIMIT :limit OFFSET :offset');
       $this->db->bind(':limit', $limit);
       $this->db->bind(':offset', $offset);
       $results = $this->db->resultSet();
@@ -21,8 +25,9 @@
     }
 
     public function addPost($data){
-      $this->db->query('INSERT INTO posts (title, body) VALUES (:title, :body)');
+      $this->db->query('INSERT INTO posts (user_id, title, body) VALUES (:user_id, :title, :body)');
       // Bind values
+      $this->db->bind(':user_id', $data['user_id']);
       $this->db->bind(':title', $data['title']);
       $this->db->bind(':body', $data['body']);
 
@@ -35,7 +40,10 @@
     }
 
     public function getPostById($id){
-      $this->db->query('SELECT * FROM posts WHERE id = :id');
+      $this->db->query('SELECT posts.*, users.name as author_name
+                        FROM posts
+                        INNER JOIN users ON posts.user_id = users.id
+                        WHERE posts.id = :id');
       $this->db->bind(':id', $id);
 
       $row = $this->db->single();
