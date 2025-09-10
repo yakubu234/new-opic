@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/style.css">
 </head>
 <body>
+    <script>
+        // Pass PHP variables to JavaScript
+        const IS_LOGGED_IN = <?php echo isLoggedIn() ? 'true' : 'false'; ?>;
+        const URLROOT = '<?php echo URLROOT; ?>';
+    </script>
     <header>
         <nav>
             <a href="<?php echo URLROOT; ?>">Home</a>

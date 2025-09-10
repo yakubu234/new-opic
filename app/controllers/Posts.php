@@ -142,17 +142,33 @@
     }
 
     public function delete($id){
+      $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Check for admin role
         if(!isAdmin()){
+          if ($isAjax) {
+            http_response_code(403); // Forbidden
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            exit;
+          }
           header('Location: ' . URLROOT . '/posts');
           return;
         }
 
         if($this->postModel->deletePost($id)){
+          if ($isAjax) {
+            echo json_encode(['success' => true, 'message' => 'Post Removed']);
+            exit;
+          }
           flash('post_message', 'Post Removed');
           header('Location: ' . URLROOT . '/posts');
         } else {
+          if ($isAjax) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Something went wrong']);
+            exit;
+          }
           die('Something went wrong');
         }
       } else {

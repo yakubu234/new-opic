@@ -3,6 +3,14 @@
 // Define a constant for the log file path
 define('LOG_FILE', APPROOT . '/logs/errors.log');
 
+// Ensure the log directory exists
+if (!file_exists(dirname(LOG_FILE))) {
+    // The 0777 permission is often needed for web servers to write files.
+    // The `true` parameter allows for recursive directory creation.
+    mkdir(dirname(LOG_FILE), 0777, true);
+}
+
+
 /**
  * Custom Error Handler
  *

@@ -165,6 +165,7 @@
       $_SESSION['user_email'] = $user->email;
       $_SESSION['user_name'] = $user->name;
       $_SESSION['user_role'] = $user->role;
+      $_SESSION['last_activity'] = time(); // Add this line
       header('Location: ' . URLROOT . '/posts');
     }
 
@@ -173,6 +174,7 @@
       unset($_SESSION['user_email']);
       unset($_SESSION['user_name']);
       unset($_SESSION['user_role']);
+      unset($_SESSION['last_activity']); // Add this line
       session_destroy();
       header('Location: ' . URLROOT . '/users/login');
     }

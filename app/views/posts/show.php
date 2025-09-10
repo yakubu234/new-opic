@@ -14,9 +14,7 @@
   <?php endif; ?>
 
   <?php if(isAdmin()) : ?>
-    <form class="pull-right" action="<?php echo URLROOT; ?>/posts/delete/<?php echo $data['post']->id; ?>" method="post">
-      <input type="submit" value="Delete" class="btn btn-danger">
-    </form>
+    <button id="delete-post-btn" class="btn btn-danger pull-right" data-id="<?php echo $data['post']->id; ?>" data-urlroot="<?php echo URLROOT; ?>">Delete</button>
   <?php endif; ?>
 <?php endif; ?>
 
