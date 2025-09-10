@@ -1,10 +1,5 @@
 <?php
-  // Start session
-  // session_start(); // This will be started in bootstrap.php
-
   // Flash message helper
-  // EXAMPLE - flash('register_success', 'You are now registered');
-  // DISPLAY IN VIEW - echo flash('register_success');
   function flash($name = '', $message = '', $class = 'alert alert-success'){
     if(!empty($name)){
       if(!empty($message) && empty($_SESSION[$name])){
@@ -27,8 +22,18 @@
     }
   }
 
+  // Check if user is logged in
   function isLoggedIn(){
     if(isset($_SESSION['user_id'])){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Check if user is an admin
+  function isAdmin(){
+    if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
       return true;
     } else {
       return false;

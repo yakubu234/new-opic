@@ -143,12 +143,10 @@
 
     public function delete($id){
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        // Get existing post from model
-        $post = $this->postModel->getPostById($id);
-
-        // Check for owner
-        if($post->user_id != $_SESSION['user_id']){
+        // Check for admin role
+        if(!isAdmin()){
           header('Location: ' . URLROOT . '/posts');
+          return;
         }
 
         if($this->postModel->deletePost($id)){
