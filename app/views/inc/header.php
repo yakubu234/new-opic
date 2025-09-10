@@ -16,10 +16,14 @@
         <nav>
             <a href="<?php echo URLROOT; ?>">Home</a>
             <a href="<?php echo URLROOT; ?>/pages/about">About</a>
+            <a href="<?php echo URLROOT; ?>/posts">Posts</a>
 
             <div class="user-links">
                 <?php if(isLoggedIn()) : ?>
                     <span>Welcome <?php echo $_SESSION['user_name']; ?></span>
+                    <?php if(isAdmin()) : ?>
+                        <a href="<?php echo URLROOT; ?>/admin">Admin Dashboard</a>
+                    <?php endif; ?>
                     <a href="<?php echo URLROOT; ?>/users/logout">Logout</a>
                 <?php else : ?>
                     <a href="<?php echo URLROOT; ?>/users/login">Login</a>
