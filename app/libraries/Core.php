@@ -13,11 +13,15 @@
       $url = $this->getUrl();
 
       // Look in controllers for first value
-      if(isset($url[0]) && file_exists('../app/controllers/' . ucwords($url[0]). '.php')){
+      $controllerPath = '../app/controllers/' . ucwords($url[0] ?? '') . '.php';
+      if(isset($url[0]) && file_exists($controllerPath)){
         // If exists, set as controller
         $this->currentController = ucwords($url[0]);
         // Unset 0 Index
         unset($url[0]);
+      } else if (isset($url[0])) {
+          // Controller does not exist
+          show404();
       }
 
       // Require the controller
@@ -33,6 +37,9 @@
           $this->currentMethod = $url[1];
           // Unset 1 index
           unset($url[1]);
+        } else {
+            // Method does not exist
+            show404();
         }
       }
 
