@@ -1,0 +1,98 @@
+#!/usr/bin/env php
+<?php
+// Bootstrap the application to get access to constants and helpers
+require_once __DIR__ . '/app/bootstrap.php';
+
+// --- Command parsing logic ---
+
+// Get arguments passed to the script
+$args = $argv;
+
+// The first argument is always the script name, so we remove it.
+array_shift($args);
+
+if (empty($args)) {
+    displayHelp();
+    exit(1);
+}
+
+// The command is the first argument (e.g., 'make:migration')
+$command = $args[0];
+
+switch ($command) {
+    case 'make:migration':
+        handleMakeMigration($args);
+        break;
+    default:
+        echo "Error: Unknown command '$command'.\n\n";
+        displayHelp();
+        exit(1);
+}
+
+function handleMakeMigration($args) {
+    // The migration name should be the second argument
+    if (!isset($args[1])) {
+        echo "Error: Missing migration name.\n";
+        echo "Usage: php craft make:migration <migration_name>\n";
+        exit(1);
+    }
+    $name = $args[1];
+
+    // 1. Generate timestamp
+    $timestamp = date('Y_m_d_His');
+
+    // 2. Construct filename
+    $filename = "{$timestamp}_{$name}.php";
+    $filepath = APPROOT . "/database/migrations/{$filename}";
+
+    // 3. Generate class name
+    $className = str_replace('_', '', ucwords($name, '_'));
+
+    // 4. Create file content from template
+    $stub = getMigrationStub($className);
+
+    // 5. Write the new file
+    if (file_put_contents($filepath, $stub) === false) {
+        echo "Error: Could not write migration file to disk.\n";
+        exit(1);
+    }
+
+    echo "Migration created successfully: {$filename}\n";
+    exit(0);
+}
+
+function getMigrationStub($className) {
+    return <<<PHP
+<?php
+
+class {$className} {
+    /**
+     * Run the migrations.
+     *
+     * @param \\PDO \$pdo
+     * @return void
+     */
+    public function up(PDO \$pdo) {
+        // \$pdo->exec("SQL GOES HERE");
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @param \\PDO \$pdo
+     * @return void
+     */
+    public function down(PDO \$pdo) {
+        // \$pdo->exec("SQL GOES HERE");
+    }
+}
+PHP;
+}
+
+function displayHelp() {
+    echo "Craft CLI Tool\n\n";
+    echo "Usage:\n";
+    echo "  command [arguments]\n\n";
+    echo "Available Commands:\n";
+    echo "  make:migration <name>   Create a new migration file.\n";
+}
