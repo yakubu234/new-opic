@@ -1,8 +1,11 @@
 <?php
-  class Admin extends AdminController {
+  class Admin extends Controller {
     public function __construct(){
-      // First, run the parent constructor to check for admin
-      parent::__construct();
+      // Use the new centralized permission check
+      if(!Permissions::canViewAdminDashboard()){
+        header('Location: ' . URLROOT . '/posts');
+        exit();
+      }
     }
 
     public function index(){

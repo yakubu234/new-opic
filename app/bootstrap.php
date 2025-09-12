@@ -5,6 +5,7 @@
   // Load Helpers
   require_once 'helpers/session_helper.php';
   require_once 'helpers/error_helper.php';
+  require_once 'helpers/permission_helper.php';
 
   // Set custom error handlers
   set_error_handler('customErrorHandler');

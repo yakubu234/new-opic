@@ -9,11 +9,11 @@
 
 <?php if(isLoggedIn()): ?>
   <hr>
-  <?php if($data['post']->user_id == $_SESSION['user_id']) : ?>
+  <?php if(Permissions::canEditPost($data['post'])) : ?>
     <a href="<?php echo URLROOT; ?>/posts/edit/<?php echo $data['post']->id; ?>" class="btn btn-dark">Edit</a>
   <?php endif; ?>
 
-  <?php if(isAdmin()) : ?>
+  <?php if(Permissions::canDeletePost()) : ?>
     <button id="delete-post-btn" class="btn btn-danger pull-right" data-id="<?php echo $data['post']->id; ?>" data-urlroot="<?php echo URLROOT; ?>">Delete</button>
   <?php endif; ?>
 <?php endif; ?>
